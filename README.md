@@ -31,6 +31,7 @@ un diseño pensado para móvil.
 **Para el paciente**
 
 - Crear cuenta con validación de documento y correo
+- Recuperar la contraseña con un enlace que dura una hora y sirve una vez
 - Ver los horarios realmente libres, actualizados al momento
 - Agendar, reprogramar y cancelar hasta 24 horas antes
 - Consultar su historia clínica en modo de solo lectura
@@ -44,6 +45,8 @@ un diseño pensado para móvil.
 - Listado de pacientes con su historial y saldo
 - Bandeja de mensajes del formulario de contacto
 - Edición del catálogo de tratamientos sin tocar código
+- Gestión de cuentas: crear usuarios de cualquier rol, restablecer
+  contraseñas y desactivar cuentas (solo administración)
 
 ## Tecnologías
 
@@ -117,15 +120,27 @@ ejemplo para probar el panel.
 
 **3. Configurar las credenciales**
 
-Edite `includes/config.php`:
+Las contraseñas **no van en `config.php`**, porque ese archivo está en el
+repositorio y cualquiera que vea el código las leería. Van en
+`includes/config.local.php`, que `.gitignore` excluye.
+
+Copie `includes/config.local.example.php` con el nombre `config.local.php` y
+escriba allí los datos de hPanel:
 
 ```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'u123456789_odontobaron');
-define('DB_USER', 'u123456789_admin');
-define('DB_PASS', 'la-contraseña-que-creó');
-define('SITIO_URL', 'https://sudominio.com');
+return [
+    'driver'  => 'mysql',
+    'host'    => 'localhost',
+    'nombre'  => 'u123456789_odontobaron',
+    'usuario' => 'u123456789_admin',
+    'clave'   => 'la-contraseña-que-creó',
+    'url'     => 'https://sudominio.com',
+];
 ```
+
+Si ese archivo no existe, el sitio usa los valores por defecto de `config.php`
+y no podrá conectarse: el síntoma es *"No pudimos conectar con la base de
+datos"*.
 
 **4. Subir los archivos**
 
@@ -135,8 +150,15 @@ Por el Administrador de archivos o por FTP, suba todo el contenido a
 **5. Activar el correo**
 
 Cree una cuenta de correo del dominio en hPanel y póngala en `MAIL_REMITENTE`.
-Luego cambie `MAIL_ACTIVO` a `true` para que salgan las confirmaciones y los
-recordatorios.
+Luego ponga `'correo_activo' => true` en `config.local.php` para que salgan las
+confirmaciones, los recordatorios y los enlaces de recuperación de contraseña.
+
+### Si ya tenía una versión anterior instalada
+
+Ejecute `sql/migracion-02-restablecer-clave.sql` desde la pestaña *SQL* de
+phpMyAdmin: agrega la tabla `restablecimientos`, que la recuperación de
+contraseña necesita. En una instalación nueva no hace falta, porque esa tabla
+ya viene en `odontobaron.sql`.
 
 ### Primer ingreso
 
@@ -206,6 +228,22 @@ Los horarios de atención viven en la tabla `horarios`, no en el código.
   solo la edita el odontólogo
 - Escape de salida con `htmlspecialchars()` en todo lo que viene del usuario
 - Cookies de sesión `HttpOnly` y `SameSite=Lax`
+- Credenciales fuera del repositorio, en `config.local.php`
+- Enlaces de recuperación guardados como huella SHA-256, con vigencia de una
+  hora y un solo uso; pedir uno nuevo anula el anterior
+- La página de recuperación responde igual exista o no el correo, para que no
+  sirva de directorio de pacientes
+
+### Por qué no se pueden ver las contraseñas
+
+La tabla `usuarios` guarda `password_hash`, no la contraseña. bcrypt es de un
+solo sentido: del texto se llega a la huella, pero de la huella no se vuelve al
+texto. Al entrar, el sistema vuelve a calcular la huella de lo que se escribió y
+la compara (`password_verify`). Por eso ni la administración ni el equipo de
+desarrollo pueden leer la contraseña de un paciente, y si la base se filtrara
+tampoco podría hacerlo quien la robe. Cuando alguien olvida la suya, no se
+recupera: se reemplaza, con el enlace por correo o con una contraseña
+provisional desde el panel.
 
 El tratamiento de datos personales sigue la Ley 1581 de 2012, y la historia
 clínica, la Resolución 1995 de 1999.
