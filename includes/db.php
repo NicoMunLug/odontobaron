@@ -69,28 +69,42 @@ function pantalla_sin_conexion(): void
         exit;
     }
 
-    $instalador = dirname($_SERVER['SCRIPT_NAME'] ?? '/') === '/'
-        ? '/instalar.php'
-        : '/instalar.php';
+    // El caso más común y el más desconcertante: las credenciales están
+    // escritas, pero en la plantilla, que el sitio no lee.
+    if (CONFIG_EJEMPLO_EDITADO) {
+        $cuerpo =
+              '<h1 style="font-weight:300;font-size:1.9rem;line-height:1.2;margin:0 0 1rem">'
+            . 'Las credenciales están en el archivo equivocado</h1>'
+            . '<p>En <code>includes/config.local.example.php</code> hay datos escritos, '
+            . 'pero ese archivo es solo la plantilla: el sitio nunca lo lee.</p>'
+            . '<p><strong>La solución es cambiarle el nombre.</strong> En el administrador '
+            . 'de archivos de hPanel, renombre</p>'
+            . '<p style="margin:1rem 0;font-size:.9375rem">'
+            . '<code>config.local.example.php</code> &nbsp;→&nbsp; <code>config.local.php</code></p>'
+            . '<p>Es decir, quítele <code>.example</code> al nombre. El contenido queda igual.</p>';
+    } else {
+        $cuerpo =
+              '<h1 style="font-weight:300;font-size:1.9rem;line-height:1.2;margin:0 0 1rem">'
+            . 'Falta conectar la base de datos</h1>'
+            . '<p>Los archivos del sitio están bien subidos y PHP funciona: este mensaje '
+            . 'lo genera la propia aplicación. Lo que falta es decirle con qué base de '
+            . 'datos hablar.</p>'
+            . '<p style="margin:1.5rem 0">'
+            . '<a href="instalar.php" '
+            . 'style="background:#8574A8;color:#fff;padding:.85rem 1.5rem;border-radius:999px;'
+            . 'text-decoration:none;display:inline-block">Configurar ahora</a></p>'
+            . '<p style="font-size:.9375rem;color:#5A5268">También puede hacerlo a mano: '
+            . 'copie <code>includes/config.local.example.php</code> como '
+            . '<code>includes/config.local.php</code> y escriba allí el nombre de la base, '
+            . 'el usuario y la contraseña que aparecen en hPanel, en Bases de datos.</p>';
+    }
 
     echo '<!doctype html><html lang="es"><meta charset="utf-8">'
        . '<meta name="viewport" content="width=device-width,initial-scale=1">'
        . '<title>Falta configurar la base de datos</title><body style="' . $estilo . '">'
        . '<div style="max-width:34rem;margin:2rem auto">'
        . '<p style="color:#8574A8;font-size:.875rem;margin:0 0 .5rem">OdontoBarón</p>'
-       . '<h1 style="font-weight:300;font-size:1.9rem;line-height:1.2;margin:0 0 1rem">'
-       . 'Falta conectar la base de datos</h1>'
-       . '<p>Los archivos del sitio están bien subidos y PHP funciona: este mensaje '
-       . 'lo genera la propia aplicación. Lo que falta es decirle con qué base de '
-       . 'datos hablar.</p>'
-       . '<p style="margin:1.5rem 0">'
-       . '<a href="' . htmlspecialchars($instalador) . '" '
-       . 'style="background:#8574A8;color:#fff;padding:.85rem 1.5rem;border-radius:999px;'
-       . 'text-decoration:none;display:inline-block">Configurar ahora</a></p>'
-       . '<p style="font-size:.9375rem;color:#5A5268">También puede hacerlo a mano: '
-       . 'copie <code>includes/config.local.example.php</code> como '
-       . '<code>includes/config.local.php</code> y escriba allí el nombre de la base, '
-       . 'el usuario y la contraseña que aparecen en hPanel, en Bases de datos.</p>'
+       . $cuerpo
        . '</div></body></html>';
     exit;
 }

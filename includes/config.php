@@ -14,6 +14,17 @@
 $local = [];
 define('CONFIG_LOCAL_RUTA', __DIR__ . '/config.local.php');
 define('CONFIG_LOCAL_EXISTE', is_file(CONFIG_LOCAL_RUTA));
+define('CONFIG_EJEMPLO_RUTA', __DIR__ . '/config.local.example.php');
+
+/**
+ * Error fácil de cometer: escribir las credenciales en la plantilla en vez
+ * de en la copia. La plantilla se llama config.local.example.php y el sitio
+ * no la lee nunca; si todavía trae el nombre de base de ejemplo está sin
+ * tocar, y si no, alguien escribió ahí pensando que era el archivo bueno.
+ */
+define('CONFIG_EJEMPLO_EDITADO', !CONFIG_LOCAL_EXISTE
+    && is_file(CONFIG_EJEMPLO_RUTA)
+    && strpos((string) @file_get_contents(CONFIG_EJEMPLO_RUTA), 'u000000000_odontobaron') === false);
 
 if (CONFIG_LOCAL_EXISTE) {
     $local = require CONFIG_LOCAL_RUTA;
