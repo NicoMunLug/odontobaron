@@ -1,0 +1,16 @@
+# Configuración con credenciales reales
+includes/config.local.php
+
+# Base de pruebas local
+storage/
+*.sqlite
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Editores
+.vscode/
+.idea/
+*.swp
