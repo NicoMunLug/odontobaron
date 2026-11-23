@@ -2,16 +2,43 @@
 /**
  * OdontoBarón · Configuración
  * -----------------------------------------------------------------
- * En Hostinger: hPanel > Bases de datos > MySQL. Copie allí el nombre
- * de la base, el usuario y la contraseña que creó, y péguelos abajo.
+ * ESTE ARCHIVO NO LLEVA CONTRASEÑAS. Va en el repositorio, así que
+ * cualquiera que vea el código vería lo que esté escrito aquí.
+ *
+ * Las credenciales del servidor se escriben en includes/config.local.php,
+ * que git ignora. Copie includes/config.local.example.php con ese nombre
+ * y ponga allí los datos de hPanel > Bases de datos > MySQL.
  */
 
+/** Valores del servidor, si existe el archivo local. */
+$local = [];
+$archivoLocal = __DIR__ . '/config.local.php';
+if (is_file($archivoLocal)) {
+    $local = require $archivoLocal;
+    if (!is_array($local)) {
+        $local = [];
+    }
+}
+
+/**
+ * Orden de prioridad: archivo local > variable de entorno > valor por defecto.
+ * Así el mismo código corre en Hostinger, en local y en las pruebas.
+ */
+function cfg(array $local, string $clave, string $entorno, $defecto)
+{
+    if (array_key_exists($clave, $local) && $local[$clave] !== '') {
+        return $local[$clave];
+    }
+    $v = getenv($entorno);
+    return ($v === false || $v === '') ? $defecto : $v;
+}
+
 // --- Base de datos ------------------------------------------------
-define('DB_DRIVER', getenv('OB_DRIVER') ?: 'mysql');   // mysql | sqlite
-define('DB_HOST',   getenv('OB_HOST')   ?: 'localhost');
-define('DB_NAME',   getenv('OB_NAME')   ?: 'odontobaron');
-define('DB_USER',   getenv('OB_USER')   ?: 'root');
-define('DB_PASS',   getenv('OB_PASS')   ?: '');
+define('DB_DRIVER', cfg($local, 'driver', 'OB_DRIVER', 'mysql'));   // mysql | sqlite
+define('DB_HOST',   cfg($local, 'host',   'OB_HOST',   'localhost'));
+define('DB_NAME',   cfg($local, 'nombre', 'OB_NAME',   'odontobaron'));
+define('DB_USER',   cfg($local, 'usuario', 'OB_USER',  'root'));
+define('DB_PASS',   cfg($local, 'clave',  'OB_PASS',   ''));
 define('DB_CHARSET', 'utf8mb4');
 
 // Solo para pruebas locales sin servidor MySQL (DB_DRIVER = sqlite)
@@ -20,7 +47,7 @@ define('DB_SQLITE_PATH', __DIR__ . '/../storage/odontobaron.sqlite');
 // --- Sitio --------------------------------------------------------
 define('SITIO_NOMBRE',  'Dra. Alejandra Barón');
 define('SITIO_LEMA',    'Odontología Digital y Estética');
-define('SITIO_URL',     getenv('OB_URL') ?: '');   // https://midominio.com (sin barra final)
+define('SITIO_URL',     cfg($local, 'url', 'OB_URL', ''));   // https://midominio.com (sin barra final)
 
 define('CONTACTO_WHATSAPP', '573123716032');
 define('CONTACTO_TELEFONO', '+57 312 371 6032');
@@ -36,10 +63,12 @@ define('CITA_DIAS_MAX',          60);   // hasta cuántos días adelante se pued
 // Hostinger permite mail() con una cuenta del dominio.
 define('MAIL_REMITENTE', 'no-responder@odontobaron.com');
 define('MAIL_NOMBRE',    'Dra. Alejandra Barón');
-define('MAIL_ACTIVO',    false);   // póngalo en true cuando el dominio esté configurado
+define('MAIL_ACTIVO',    (bool) cfg($local, 'correo_activo', 'OB_MAIL', false));
 
 // --- Entorno ------------------------------------------------------
-define('APP_DEBUG', getenv('OB_DEBUG') === '1');
+// Póngalo en true solo mientras busca un error: muestra rutas y consultas.
+define('APP_DEBUG', (bool) cfg($local, 'depurar', 'OB_DEBUG', false) === true
+                    || cfg($local, 'depurar', 'OB_DEBUG', '0') === '1');
 
 date_default_timezone_set('America/Bogota');
 
