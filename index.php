@@ -20,6 +20,12 @@ $formacion = [
   ['2019', 'Restauraciones en anteriores con resina Ceram.x SphereTEC', 'Dentsply Sirona'],
 ];
 
+// Agrupada por año: cada franja de la sección reúne los cursos de un año.
+$formacion_por_anio = [];
+foreach ($formacion as $f) {
+    $formacion_por_anio[$f[0]][] = $f;
+}
+
 require __DIR__ . '/includes/header.php';
 ?>
 
@@ -176,12 +182,17 @@ require __DIR__ . '/includes/header.php';
       </p>
     </div>
     <div class="trayecto">
-      <?php foreach ($formacion as $f): ?>
+      <?php foreach ($formacion_por_anio as $anio => $cursos): ?>
         <div class="hito">
-          <div class="hito__anio"><?= e($f[0]) ?></div>
-          <div class="hito__que">
-            <strong><?= e($f[1]) ?></strong><?= $f[2] ? '<br>' . e($f[2]) : '' ?>
-          </div>
+          <div class="hito__anio"><?= e((string) $anio) ?></div>
+          <ul class="hito__cursos">
+            <?php foreach ($cursos as $c): ?>
+              <li>
+                <strong><?= e($c[1]) ?></strong>
+                <?php if ($c[2]): ?><span><?= e($c[2]) ?></span><?php endif; ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
         </div>
       <?php endforeach; ?>
     </div>

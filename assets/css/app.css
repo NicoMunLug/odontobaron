@@ -360,18 +360,25 @@ p:last-child { margin-bottom: 0; }
   .perfil__foto { max-width: 18rem; }
 }
 
-/* --- Formación: línea de tiempo real ------------------------------ */
-.trayecto { display: grid; gap: 0; max-width: 46rem; }
+/* --- Formación: agrupada por año ----------------------------------
+   Cada año es una franja: el año a la izquierda y sus cursos en dos
+   columnas. Así la sección ocupa el ancho completo en vez de dejar
+   media página en blanco, y se leen cuatro franjas en vez de doce
+   renglones sueltos. */
+.trayecto { display: grid; gap: 0; }
 .hito {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  gap: 1.5rem;
-  padding: 1.1rem 0;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: clamp(1.25rem, .5rem + 2vw, 3rem);
+  padding: 1.75rem 0;
   border-top: 1px solid var(--linea);
+  align-items: start;
 }
 .hito:last-child { border-bottom: 1px solid var(--linea); }
 .hito__anio {
-  font-size: .9375rem;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
   color: var(--lila-hondo);
   font-variant-numeric: tabular-nums;
   padding-top: .1rem;
@@ -379,7 +386,27 @@ p:last-child { margin-bottom: 0; }
 .hito__que { color: var(--tinta-media); }
 .hito__que strong { color: var(--tinta); font-weight: 500; }
 
-/* --- Galería ------------------------------------------------------ */
+.hito__cursos {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+.hito__cursos li { display: grid; gap: .15rem; align-content: start; }
+.hito__cursos strong { color: var(--tinta); font-weight: 500; font-size: .9688rem; }
+.hito__cursos span   { color: var(--tinta-suave); font-size: .8438rem; }
+@media (max-width: 48rem) {
+  .hito { grid-template-columns: 1fr; gap: .9rem; padding: 1.4rem 0; }
+  .hito__anio { font-size: 1.5rem; }
+  .hito__cursos { grid-template-columns: 1fr; gap: .9rem; }
+}
+
+/* --- Galería: mosaico compacto ------------------------------------
+   Antes cada pieza era 3/4 y la rejilla se estiraba hasta ocupar casi
+   mil píxeles de alto. Ahora son ocho celdas cuadradas en cuatro
+   columnas: dos filas parejas, sin huecos y en poco más de la mitad
+   del espacio. El recorte se ancla arriba porque los casos de antes y
+   después llevan el rótulo en la parte superior de la foto. */
 .galeria {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
