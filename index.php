@@ -30,58 +30,63 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <section class="portada">
-  <div class="envoltura portada__caja">
-    <div class="portada__texto">
-      <h1>Una sonrisa que <em>se diseña</em> antes de tocarla.</h1>
-      <p class="entrada">
-        Odontología digital y estética en Palermo, Bogotá. Planeamos cada tratamiento
-        sobre imágenes y modelos, para que usted vea a dónde vamos antes de empezar.
-      </p>
-      <div class="portada__acciones">
-        <a class="boton" href="<?= base_url('agendar.php') ?>">Agendar mi cita</a>
-        <a class="boton boton--contorno" href="<?= base_url('tratamientos.php') ?>">Ver tratamientos</a>
+  <div class="envoltura">
+    <div class="portada__lienzo">
+
+      <div class="portada__texto">
+        <h1>Odontología<br>pensada<br><em>para usted</em></h1>
+        <p class="entrada">
+          Planeamos cada tratamiento sobre imágenes y modelos, y se lo explicamos
+          antes de empezar. Así usted sabe a dónde vamos y cuánto cuesta llegar.
+        </p>
+        <div class="portada__acciones">
+          <a class="boton" href="<?= base_url('agendar.php') ?>">Agendar mi cita</a>
+          <a class="boton boton--circulo" href="<?= base_url('tratamientos.php') ?>"
+             aria-label="Ver los tratamientos">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
       </div>
+
+      <div class="portada__media">
+        <img class="portada__foto" src="<?= base_url('assets/img/doctora/retrato.png') ?>"
+             alt="Dra. Laura Alejandra Barón Malagón en su consultorio"
+             width="594" height="888" fetchpriority="high">
+
+        <!-- Anotaciones sobre la foto, como las de una ficha clínica -->
+        <figure class="nota nota--alta">
+          <figcaption><b>Valoración sin costo</b>Revisión, diagnóstico y plan por escrito</figcaption>
+        </figure>
+        <figure class="nota nota--baja">
+          <figcaption><b>Agenda en línea</b>Elige día y hora, con confirmación al instante</figcaption>
+        </figure>
+      </div>
+
+      <div class="portada__aval">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"
+                stroke="var(--lila)" stroke-width="1.6" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.4" stroke="var(--lila)" stroke-width="1.6"/>
+        </svg>
+        <p><b>Palermo, Teusaquillo</b>Atendiendo en Bogotá desde 2019</p>
+      </div>
+
+      <ul class="portada__fichas">
+        <li>Diseño digital</li>
+        <li>Plan por escrito</li>
+        <li>Pago por abonos</li>
+        <li>Control incluido</li>
+      </ul>
     </div>
 
-    <div class="portada__media">
-      <div class="portada__retrato">
-        <img src="<?= base_url('assets/img/doctora/retrato.png') ?>"
-             alt="Dra. Laura Alejandra Barón Malagón en su consultorio" width="600" height="800">
-      </div>
-      <div class="sello">
-        <strong>12</strong>
-        formaciones<br>entre 2019 y 2022
-      </div>
-    </div>
-  </div>
-
-  <div class="envoltura" style="margin-top:clamp(2.5rem,2rem+2vw,4rem)">
-    <div class="cinta">
-      <div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 6 9 17l-5-5" stroke="var(--lila)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Diseño de sonrisa digital
-      </div>
-      <div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 6 9 17l-5-5" stroke="var(--lila)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Agenda en línea las 24 horas
-      </div>
-      <div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 6 9 17l-5-5" stroke="var(--lila)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Pago total o por abonos
-      </div>
-      <div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 6 9 17l-5-5" stroke="var(--lila)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <?= e($sede['barrio'] ?? 'Palermo, Bogotá') ?>
-      </div>
-    </div>
+    <ul class="portada__pie">
+      <li><b>Primero entender</b><span>la valoración no cuesta</span></li>
+      <li><b>Después planear</b><span>sobre imágenes y modelos</span></li>
+      <li><b>Y luego tratar</b><span>con el control hasta el final</span></li>
+    </ul>
   </div>
 </section>
 
@@ -150,21 +155,51 @@ require __DIR__ . '/includes/header.php';
         el paso a paso de varios tratamientos.
       </p>
     </div>
+    <?php
+    // Las fotos vienen en pares del mismo paciente, así que cada caso se
+    // muestra completo: el antes y el después juntos, que es lo que deja
+    // ver el trabajo.
+    $casos = [
+      ['antes' => 2, 'despues' => 3, 'titulo' => 'Ortodoncia',          'nota' => 'Brackets estéticos'],
+      ['antes' => 4, 'despues' => 5, 'titulo' => 'Corona en zirconio',  'nota' => 'Pieza posterior'],
+      ['antes' => 6, 'despues' => 7, 'titulo' => 'Rehabilitación oral', 'nota' => 'Dientes anteriores'],
+    ];
+    ?>
     <div class="galeria">
-      <?php for ($i = 1; $i <= 7; $i++): ?>
-        <figure class="galeria__pieza">
-          <img src="<?= base_url("assets/img/galeria/trabajo-$i.jpg") ?>"
-               alt="Caso <?= $i ?> atendido en el consultorio" loading="lazy">
+      <?php foreach ($casos as $c): ?>
+        <figure class="caso">
+          <div class="caso__par">
+            <div class="caso__foto">
+              <img src="<?= base_url("assets/img/galeria/trabajo-{$c['antes']}.jpg") ?>"
+                   alt="<?= e($c['titulo']) ?>, antes del tratamiento" loading="lazy">
+              <span>Antes</span>
+            </div>
+            <div class="caso__foto">
+              <img src="<?= base_url("assets/img/galeria/trabajo-{$c['despues']}.jpg") ?>"
+                   alt="<?= e($c['titulo']) ?>, después del tratamiento" loading="lazy">
+              <span>Después</span>
+            </div>
+          </div>
+          <figcaption>
+            <b><?= e($c['titulo']) ?></b>
+            <span><?= e($c['nota']) ?></span>
+          </figcaption>
         </figure>
-      <?php endfor; ?>
-      <a class="galeria__pieza galeria__social" href="<?= e(instagram_url()) ?>"
-         target="_blank" rel="noopener">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/>
-          <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/>
-          <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/>
+      <?php endforeach; ?>
+
+      <a class="galeria__social" href="<?= e(instagram_url()) ?>" target="_blank" rel="noopener">
+        <span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/>
+          </svg>
+          Ver el paso a paso en Instagram
+        </span>
+        <svg class="galeria__flecha" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Ver más casos
       </a>
     </div>
   </div>
@@ -199,23 +234,61 @@ require __DIR__ . '/includes/header.php';
 
 <?php if ($sede): ?>
 <section class="seccion" id="consultorio">
-  <div class="envoltura perfil">
-    <div>
-      <h2>El consultorio</h2>
-      <p class="entrada"><?= e($sede['direccion']) ?></p>
-      <p class="plomo">
-        Estamos en <?= e($sede['barrio']) ?>, en <?= e($sede['ciudad']) ?>.
-        Atendemos de lunes a viernes de 8:00&nbsp;a.&nbsp;m. a 6:00&nbsp;p.&nbsp;m.
-        y los sábados de 9:00&nbsp;a.&nbsp;m. a 1:00&nbsp;p.&nbsp;m.
-      </p>
-      <div class="fila" style="margin-top:1.5rem">
-        <a class="boton" href="<?= base_url('agendar.php') ?>">Agendar mi cita</a>
-        <a class="boton boton--contorno" href="<?= base_url('sede.php') ?>">Cómo llegar</a>
+  <div class="envoltura">
+    <div class="sede">
+      <div class="sede__texto">
+        <h2>El consultorio</h2>
+        <p class="entrada"><?= e($sede['direccion']) ?></p>
+        <p class="plomo">
+          Estamos en <?= e($sede['barrio']) ?>, en <?= e($sede['ciudad']) ?>, a dos
+          cuadras del parque. El edificio tiene portería y ascensor.
+        </p>
+
+        <dl class="sede__datos">
+          <div>
+            <dt>Lunes a viernes</dt>
+            <dd>8:00 a.&nbsp;m. – 6:00 p.&nbsp;m.</dd>
+          </div>
+          <div>
+            <dt>Sábados</dt>
+            <dd>9:00 a.&nbsp;m. – 1:00 p.&nbsp;m.</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd><?= e(CONTACTO_TELEFONO) ?></dd>
+          </div>
+        </dl>
+
+        <div class="fila" style="margin-top:1.75rem">
+          <a class="boton" href="<?= base_url('agendar.php') ?>">Agendar mi cita</a>
+          <a class="boton boton--contorno" href="<?= base_url('sede.php') ?>">Cómo llegar</a>
+        </div>
       </div>
-    </div>
-    <div class="perfil__foto arco--invertido" style="border-radius:0 0 14rem 14rem">
-      <img src="<?= base_url('assets/img/sedes/consultorio.jpg') ?>"
-           alt="Consultorio en <?= e($sede['barrio']) ?>" loading="lazy">
+
+      <?php
+      $mapa = 'https://www.google.com/maps/search/?api=1&query='
+            . urlencode($sede['direccion'] . ', ' . $sede['barrio'] . ', ' . $sede['ciudad']);
+      ?>
+      <a class="sede__mapa" href="<?= e($mapa) ?>" target="_blank" rel="noopener">
+        <span class="sede__pin" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"
+                  stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="sede__mapa-texto">
+          <b><?= e($sede['direccion']) ?></b>
+          <span><?= e($sede['barrio']) ?>, <?= e($sede['ciudad']) ?></span>
+        </span>
+        <span class="sede__mapa-accion">
+          Abrir en Google Maps
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
     </div>
   </div>
 </section>
