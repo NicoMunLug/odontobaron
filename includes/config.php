@@ -12,9 +12,11 @@
 
 /** Valores del servidor, si existe el archivo local. */
 $local = [];
-$archivoLocal = __DIR__ . '/config.local.php';
-if (is_file($archivoLocal)) {
-    $local = require $archivoLocal;
+define('CONFIG_LOCAL_RUTA', __DIR__ . '/config.local.php');
+define('CONFIG_LOCAL_EXISTE', is_file(CONFIG_LOCAL_RUTA));
+
+if (CONFIG_LOCAL_EXISTE) {
+    $local = require CONFIG_LOCAL_RUTA;
     if (!is_array($local)) {
         $local = [];
     }
@@ -40,6 +42,17 @@ define('DB_NAME',   cfg($local, 'nombre', 'OB_NAME',   'odontobaron'));
 define('DB_USER',   cfg($local, 'usuario', 'OB_USER',  'root'));
 define('DB_PASS',   cfg($local, 'clave',  'OB_PASS',   ''));
 define('DB_CHARSET', 'utf8mb4');
+
+/**
+ * El sitio está subido pero todavía sin credenciales: config.local.php no
+ * existe y la configuración sigue en los valores de ejemplo. Se usa para
+ * mostrar la guía de instalación en vez de un error sin explicación.
+ */
+define('SIN_CONFIGURAR', !CONFIG_LOCAL_EXISTE
+    && DB_DRIVER === 'mysql'
+    && DB_NAME === 'odontobaron'
+    && DB_USER === 'root'
+    && DB_PASS === '');
 
 // Solo para pruebas locales sin servidor MySQL (DB_DRIVER = sqlite)
 define('DB_SQLITE_PATH', __DIR__ . '/../storage/odontobaron.sqlite');
