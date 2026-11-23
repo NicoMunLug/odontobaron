@@ -11,19 +11,34 @@ function e(?string $texto): string
 }
 
 /** Convierte saltos de línea en párrafos. */
+/**
+ * Normaliza los saltos de línea de un campo de texto.
+ *
+ * MySQL interpreta la secuencia \n dentro de una cadena, pero SQLite la
+ * guarda tal cual. Sin esto, el mismo registro se ve con párrafos en el
+ * servidor y con "\n" a la vista en las pruebas locales, y las listas
+ * de "el tratamiento incluye" quedan en un solo renglón.
+ */
+function saltos(?string $texto): string
+{
+    $t = str_replace(["\r\n", "\r"], "\n", (string) $texto);
+    return str_replace(['\\r\\n', '\\n', '\\r'], "\n", $t);
+}
+
 function parrafos(?string $texto): string
 {
-    $bloques = preg_split('/\n\s*\n/', trim((string) $texto));
+    $bloques = preg_split('/\n\s*\n/', trim(saltos($texto)));
     return implode('', array_map(fn($b) => '<p>' . nl2br(e(trim($b))) . '</p>', $bloques));
 }
 
 /** Convierte un texto de una línea por ítem en una lista. */
 function lineas(?string $texto): array
 {
-    if ($texto === null || trim($texto) === '') {
+    $t = saltos($texto);
+    if (trim($t) === '') {
         return [];
     }
-    return array_values(array_filter(array_map('trim', explode("\n", $texto)), 'strlen'));
+    return array_values(array_filter(array_map('trim', explode("\n", $t)), 'strlen'));
 }
 
 // --- Rutas --------------------------------------------------------
