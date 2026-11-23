@@ -1,0 +1,220 @@
+/* =====================================================================
+   OdontoBarón · Panel interno
+   Hereda los tokens de app.css. Aquí manda la densidad: más información
+   por pantalla, el mismo lila como tinta.
+   ===================================================================== */
+
+.panel {
+  display: grid;
+  grid-template-columns: 15.5rem minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--hueso);
+}
+
+/* --- Barra lateral ------------------------------------------------- */
+.lateral {
+  position: sticky; top: 0;
+  align-self: start;
+  height: 100vh;
+  padding: 1.5rem 1rem;
+  background: var(--tinta);
+  color: #CFC9D9;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.lateral__marca {
+  display: flex; align-items: center; gap: .6rem;
+  padding: 0 .6rem 1.5rem;
+  text-decoration: none; color: inherit;
+}
+.lateral__marca img { height: 1.9rem; width: auto; }
+
+.lateral nav { display: grid; gap: .15rem; }
+.lateral nav a {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .62rem .7rem;
+  border-radius: var(--radio-s);
+  color: #BDB5C9;
+  text-decoration: none;
+  font-size: .9375rem;
+  transition: background .18s var(--paso), color .18s var(--paso);
+}
+.lateral nav a:hover { background: rgba(255,255,255,.07); color: #fff; }
+.lateral nav a[aria-current="page"] { background: var(--lila); color: #fff; }
+.lateral nav a svg { flex: 0 0 auto; opacity: .9; }
+
+.lateral__cuenta {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255,255,255,.12);
+  font-size: .875rem;
+}
+.lateral__cuenta a { color: #BDB5C9; text-decoration: none; }
+.lateral__cuenta a:hover { color: #fff; }
+
+.insignia {
+  margin-left: auto;
+  min-width: 1.35rem; height: 1.35rem;
+  padding: 0 .35rem;
+  display: inline-grid; place-items: center;
+  background: var(--lila-claro);
+  color: var(--tinta);
+  border-radius: var(--radio-pill);
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+/* --- Área de trabajo ----------------------------------------------- */
+.obra { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); min-width: 0; }
+.obra__cabeza {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 1rem; margin-bottom: 1.75rem;
+}
+.obra__cabeza h1 { font-size: clamp(1.5rem, 1.3rem + .9vw, 2rem); margin: 0 0 .15rem; }
+.obra__cabeza p  { margin: 0; color: var(--tinta-media); font-size: .9375rem; }
+
+/* --- Indicadores ---------------------------------------------------- */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.indicador {
+  padding: 1.15rem 1.25rem;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-m);
+}
+.indicador__rotulo { font-size: .8125rem; color: var(--tinta-media); margin-bottom: .35rem; }
+.indicador__cifra {
+  font-size: 2rem; font-weight: 300; line-height: 1.1;
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+.indicador__nota { font-size: .8125rem; color: var(--tinta-suave); margin-top: .3rem; }
+.indicador__nota--sube { color: var(--exito); }
+.indicador__nota--baja { color: var(--alerta); }
+
+/* --- Bloques -------------------------------------------------------- */
+.bloque {
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-m);
+  padding: 1.35rem 1.5rem 1.5rem;
+}
+.bloque + .bloque { margin-top: 1.25rem; }
+.bloque__cabeza {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: .75rem; margin-bottom: 1.1rem;
+}
+.bloque__cabeza h2 { font-size: 1.0625rem; font-weight: 500; letter-spacing: 0; margin: 0; }
+.bloque__cabeza p  { margin: 0; font-size: .8125rem; color: var(--tinta-suave); }
+
+.rejilla-2 { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 1.25rem; }
+.rejilla-2--pareja { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+@media (max-width: 64rem) { .rejilla-2 { grid-template-columns: 1fr; } }
+
+/* --- Gráficos (SVG propios) ----------------------------------------- */
+.grafico { width: 100%; height: auto; overflow: visible; }
+.grafico text { font-size: 11px; fill: var(--tinta-suave); font-family: inherit; }
+.grafico .eje  { stroke: var(--linea); stroke-width: 1; }
+.grafico .guia { stroke: var(--linea); stroke-width: 1; stroke-dasharray: 2 4; }
+.grafico .barra { fill: var(--lila); transition: fill .18s var(--paso); }
+.grafico .barra:hover { fill: var(--lila-hondo); }
+.grafico .valor { fill: var(--tinta); font-variant-numeric: tabular-nums; }
+
+/* barras horizontales con rótulo */
+.barras-rotulo { display: grid; gap: .75rem; }
+.barra-fila { display: grid; grid-template-columns: 9.5rem 1fr auto; gap: .85rem; align-items: center; font-size: .875rem; }
+.barra-pista { height: .6rem; background: var(--lavanda); border-radius: var(--radio-pill); overflow: hidden; }
+.barra-trazo { height: 100%; background: var(--lila); border-radius: var(--radio-pill); }
+.barra-fila span:last-child { color: var(--tinta-media); font-variant-numeric: tabular-nums; }
+@media (max-width: 34rem) { .barra-fila { grid-template-columns: 7rem 1fr auto; } }
+
+/* --- Tablas --------------------------------------------------------- */
+.tabla-caja { overflow-x: auto; margin: 0 -1.5rem -1.5rem; padding: 0 1.5rem 1.5rem; }
+table.tabla { width: 100%; border-collapse: collapse; font-size: .9375rem; }
+table.tabla th {
+  text-align: left; font-weight: 500; font-size: .8125rem;
+  color: var(--tinta-media);
+  padding: .55rem .75rem;
+  border-bottom: 1px solid var(--linea);
+  white-space: nowrap;
+}
+table.tabla td {
+  padding: .75rem;
+  border-bottom: 1px solid var(--linea);
+  vertical-align: middle;
+}
+table.tabla tbody tr:last-child td { border-bottom: 0; }
+table.tabla tbody tr:hover { background: var(--hueso); }
+table.tabla td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.persona { display: flex; align-items: center; gap: .65rem; }
+.avatar {
+  width: 2.1rem; height: 2.1rem; flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: var(--lavanda);
+  color: var(--lila-hondo);
+  border-radius: 50%;
+  font-size: .75rem; font-weight: 500;
+}
+
+/* --- Agenda del día -------------------------------------------------- */
+.agenda { display: grid; gap: .6rem; }
+.agenda__hora {
+  display: grid; grid-template-columns: 4.5rem 1fr auto; gap: 1rem; align-items: center;
+  padding: .75rem .9rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-s);
+  background: var(--blanco);
+}
+.agenda__hora strong { font-weight: 400; font-variant-numeric: tabular-nums; color: var(--lila-hondo); }
+.agenda__hora p { margin: 0; font-size: .875rem; }
+.agenda__hora .tenue { font-size: .8125rem; }
+
+/* --- Filtros --------------------------------------------------------- */
+.filtros {
+  display: flex; flex-wrap: wrap; gap: .6rem; align-items: center;
+  margin-bottom: 1.25rem;
+}
+.filtros select, .filtros input {
+  padding: .5rem .8rem;
+  font-size: .875rem;
+  border-radius: var(--radio-s);
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  width: auto;
+}
+.filtros .crece { flex: 1 1 12rem; }
+
+/* --- Barra superior en móvil ---------------------------------------- */
+.panel__barra {
+  display: none;
+  align-items: center; gap: .75rem;
+  padding: .75rem 1rem;
+  background: var(--tinta);
+  color: #fff;
+  position: sticky; top: 0; z-index: 30;
+}
+.panel__barra img { height: 1.7rem; }
+.panel__barra button {
+  margin-left: auto;
+  background: none; border: 1px solid rgba(255,255,255,.25);
+  color: #fff; border-radius: var(--radio-s);
+  width: 2.4rem; height: 2.4rem;
+  display: grid; place-items: center; cursor: pointer;
+}
+
+@media (max-width: 60rem) {
+  .panel { grid-template-columns: 1fr; }
+  .panel__barra { display: flex; }
+  .lateral {
+    position: fixed; inset: 0 auto 0 0; z-index: 40;
+    width: 16rem; height: 100vh;
+    transform: translateX(-100%);
+    transition: transform .3s var(--paso);
+  }
+  .lateral[data-abierto="si"] { transform: none; box-shadow: var(--sombra-alta); }
+}
