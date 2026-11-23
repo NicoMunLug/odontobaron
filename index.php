@@ -152,21 +152,19 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="galeria">
       <?php for ($i = 1; $i <= 7; $i++): ?>
-        <figure class="galeria__pieza" style="margin:0">
+        <figure class="galeria__pieza">
           <img src="<?= base_url("assets/img/galeria/trabajo-$i.jpg") ?>"
-               alt="Caso <?= $i ?> del consultorio" loading="lazy">
+               alt="Caso <?= $i ?> atendido en el consultorio" loading="lazy">
         </figure>
       <?php endfor; ?>
-      <a class="galeria__pieza" href="<?= e(instagram_url()) ?>" target="_blank" rel="noopener"
-         style="display:grid;place-items:center;background:var(--lila);color:#fff;text-decoration:none;padding:1.5rem;text-align:center">
-        <span>
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style="margin:0 auto .6rem" aria-hidden="true">
-            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/>
-            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/>
-            <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/>
-          </svg>
-          Ver más en Instagram
-        </span>
+      <a class="galeria__pieza galeria__social" href="<?= e(instagram_url()) ?>"
+         target="_blank" rel="noopener">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/>
+        </svg>
+        Ver más casos
       </a>
     </div>
   </div>

@@ -409,22 +409,79 @@ p:last-child { margin-bottom: 0; }
    después llevan el rótulo en la parte superior de la foto. */
 .galeria {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .625rem;
 }
 .galeria__pieza {
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radio-l);
+  position: relative;
+  aspect-ratio: 6 / 5;
+  border-radius: var(--radio-m);
+  overflow: hidden;
+  background: var(--lavanda-hondo);
+  margin: 0;
+}
+.galeria__pieza img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform .7s var(--paso);
+}
+.galeria__pieza:hover img { transform: scale(1.04); }
+
+/* La celda que lleva a Instagram cierra la rejilla. */
+.galeria__social {
+  display: grid;
+  place-content: center;
+  gap: .5rem;
+  justify-items: center;
+  padding: 1rem;
+  text-align: center;
+  background: var(--lila);
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: .9063rem;
+  transition: background .25s var(--paso);
+}
+.galeria__social:hover { background: var(--lila-hondo); }
+
+@media (max-width: 60rem) { .galeria { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 38rem) { .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* --- Ficha de un tratamiento --------------------------------------
+   No reutiliza .perfil porque allí la columna angosta va primero: el
+   texto se encogía y la foto se estiraba a pantalla completa, dejando
+   la descripción y lo que incluye fuera de la vista. */
+.ficha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: clamp(1.75rem, 1rem + 4vw, 4rem);
+  align-items: center;
+}
+.ficha__foto {
+  aspect-ratio: 5 / 4;
+  max-height: 23rem;
+  border-radius: var(--radio-l) var(--radio-l) var(--radio-l) 5rem;
   overflow: hidden;
   background: var(--lavanda-hondo);
 }
-/* el primero y el cuarto toman el motivo del arco */
-.galeria__pieza:nth-child(4n+1) { border-radius: var(--arco); }
-.galeria__pieza img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform .7s var(--paso);
+.ficha__foto img { width: 100%; height: 100%; object-fit: cover; }
+.ficha__datos {
+  display: flex; flex-wrap: wrap;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--linea);
 }
-.galeria__pieza:hover img { transform: scale(1.05); }
+.ficha__dato { display: grid; gap: .15rem; }
+.ficha__dato b {
+  font-size: 1.25rem; font-weight: 300;
+  color: var(--lila-hondo); line-height: 1.2;
+}
+.ficha__dato span { font-size: .8125rem; color: var(--tinta-suave); }
+@media (max-width: 54rem) {
+  .ficha { grid-template-columns: 1fr; }
+  .ficha__foto { order: -1; max-height: 16rem; border-radius: var(--radio-l); }
+}
 
 /* --- Formularios -------------------------------------------------- */
 .campo { display: block; margin-bottom: 1.15rem; }
