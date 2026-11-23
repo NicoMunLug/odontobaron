@@ -232,6 +232,28 @@ CREATE TABLE `mensajes` (
   KEY `idx_mensajes_leido` (`leido`, `creado_en`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ---------------------------------------------------------------------
+-- Enlaces de restablecimiento de contraseña
+--
+-- No se guarda el token que viaja en el correo, sino su huella SHA-256:
+-- si alguien lee la tabla no puede reconstruir el enlace, igual que pasa
+-- con las contraseñas. Cada enlace dura una hora y sirve una sola vez.
+-- ---------------------------------------------------------------------
+CREATE TABLE `restablecimientos` (
+  `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `usuario_id`  INT UNSIGNED NOT NULL,
+  `token_hash`  CHAR(64)     NOT NULL COMMENT 'SHA-256 del token enviado',
+  `expira_en`   DATETIME     NOT NULL,
+  `usado_en`    DATETIME     DEFAULT NULL,
+  `ip`          VARCHAR(45)  DEFAULT NULL,
+  `creado_en`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_restablecimientos_token` (`token_hash`),
+  KEY `idx_restablecimientos_usuario` (`usuario_id`, `usado_en`),
+  CONSTRAINT `fk_restablecimientos_usuario`
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- =====================================================================
 --  DATOS INICIALES
 -- =====================================================================

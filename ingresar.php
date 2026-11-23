@@ -43,6 +43,9 @@ require __DIR__ . '/includes/header.php';
         <input type="password" name="password" required autocomplete="current-password">
       </label>
       <button class="boton boton--ancho" type="submit">Ingresar</button>
+      <p class="centrado menudo" style="margin:1rem 0 0">
+        <a class="enlace" href="<?= base_url('recuperar.php') ?>">Olvidé mi contraseña</a>
+      </p>
     </form>
 
     <p class="centrado" style="margin-top:1.5rem">
