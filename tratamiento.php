@@ -28,23 +28,38 @@ require __DIR__ . '/includes/header.php';
 <section class="seccion seccion--ras">
   <div class="envoltura">
     <p class="menudo"><a class="enlace" href="<?= base_url('tratamientos.php') ?>">Tratamientos</a></p>
-    <div class="perfil" style="align-items:start;margin-top:1rem">
+    <div class="ficha" style="margin-top:1rem">
       <div>
         <h1 style="font-size:clamp(2.25rem,1.8rem+2vw,3.25rem)"><?= e($t['nombre']) ?></h1>
         <p class="entrada"><?= e($t['resumen']) ?></p>
         <div class="fila" style="margin-top:1.75rem">
           <a class="boton" href="<?= base_url('agendar.php?t=' . urlencode($t['slug'])) ?>">Agendar este tratamiento</a>
-          <span class="tenue menudo">Sesión de <?= (int) $t['duracion_min'] ?> minutos</span>
+        </div>
+        <div class="ficha__datos">
+          <div class="ficha__dato">
+            <b><?= (int) $t['duracion_min'] ?> min</b>
+            <span>duración de la sesión</span>
+          </div>
+          <div class="ficha__dato">
+            <b>Sin costo</b>
+            <span>la valoración inicial</span>
+          </div>
+          <?php if ($incluye): ?>
+            <div class="ficha__dato">
+              <b><?= count($incluye) ?></b>
+              <span><?= count($incluye) === 1 ? 'paso incluido' : 'pasos incluidos' ?></span>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
-      <div class="perfil__foto" style="aspect-ratio:4/5">
+      <div class="ficha__foto">
         <img src="<?= base_url(e($t['imagen'])) ?>" alt="<?= e($t['nombre']) ?>">
       </div>
     </div>
   </div>
 </section>
 
-<section class="seccion" style="padding-top:clamp(2rem,1.5rem+2vw,3.5rem)">
+<section class="seccion" style="padding-top:clamp(1.5rem,1rem+1vw,2.25rem)">
   <div class="envoltura" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,18rem);gap:clamp(2rem,1rem+4vw,4rem);align-items:start">
     <div class="medida">
       <?= parrafos($t['descripcion']) ?>
