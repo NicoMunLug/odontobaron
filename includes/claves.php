@@ -56,7 +56,8 @@ function crear_enlace_restablecimiento(string $email): ?string
         substr($_SERVER['REMOTE_ADDR'] ?? '', 0, 45),
     ]);
 
-    return base_url('restablecer.php?t=' . $token);
+    // Absoluta: este enlace viaja en un correo y se abre fuera del sitio.
+    return url_absoluta('restablecer.php?t=' . $token);
 }
 
 /** Busca el usuario de un token vigente. Devuelve null si no sirve. */

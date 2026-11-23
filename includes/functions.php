@@ -42,18 +42,49 @@ function lineas(?string $texto): array
 }
 
 // --- Rutas --------------------------------------------------------
+/**
+ * Ruta a un archivo o página del sitio, relativa a la raíz.
+ *
+ * No usa SITIO_URL a propósito. Antes sí lo hacía, y bastaba con dejar el
+ * valor de ejemplo en la configuración para que la hoja de estilos, las
+ * imágenes y el menú apuntaran a un dominio ajeno: el sitio cargaba, pero
+ * sin estilos ni fotos. Una ruta relativa funciona en cualquier dominio,
+ * que es justo lo que un sitio necesita de sus propios archivos.
+ */
 function base_url(string $ruta = ''): string
 {
-    $base = SITIO_URL !== '' ? SITIO_URL : '';
-    if ($base === '') {
-        $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
-        // dentro de /admin o /panel hay que subir un nivel
-        if (preg_match('#/(admin|panel)$#', $dir)) {
-            $dir = dirname($dir);
-        }
-        $base = rtrim($dir, '/');
+    $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
+    // dentro de /admin o /panel hay que subir un nivel
+    if (preg_match('#/(admin|panel)$#', $dir)) {
+        $dir = dirname($dir);
     }
-    return $base . '/' . ltrim($ruta, '/');
+    return rtrim($dir, '/') . '/' . ltrim($ruta, '/');
+}
+
+/**
+ * URL completa, con dominio. Solo para los enlaces de los correos, que se
+ * abren fuera del sitio. Toma SITIO_URL si está bien puesta y, si no, la
+ * arma con el dominio por el que llegó la visita.
+ */
+function url_absoluta(string $ruta = ''): string
+{
+    $relativa = base_url($ruta);
+    $base = SITIO_URL;
+
+    $ejemplo = $base === ''
+        || !preg_match('#^https?://#i', $base)
+        || preg_match('#(sudominio|midominio)\.com#i', $base);
+
+    if ($ejemplo) {
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if ($host === '') {
+            return $relativa;   // en consola no hay dominio que poner
+        }
+        $esquema = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        return $esquema . '://' . $host . $relativa;
+    }
+
+    return rtrim($base, '/') . $relativa;
 }
 
 function url_actual(): string

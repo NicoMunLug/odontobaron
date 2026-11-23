@@ -144,10 +144,8 @@ function registrar_paciente(array $d): array
 
     $id = (int) db()->lastInsertId();
 
-    $enlace = base_url('confirmar.php?token=' . $token);
-    if (SITIO_URL !== '') {
-        $enlace = SITIO_URL . '/confirmar.php?token=' . $token;
-    }
+    // Absoluta: este enlace viaja en un correo y se abre fuera del sitio.
+    $enlace = url_absoluta('confirmar.php?token=' . $token);
     enviar_correo($email, 'Confirme su cuenta · ' . SITIO_NOMBRE,
         plantilla_correo('Ya casi está',
             '<p>Hola ' . e($nombre) . ', confirme su cuenta para agendar citas en línea.</p>
