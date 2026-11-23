@@ -124,8 +124,13 @@ Las contraseñas **no van en `config.php`**, porque ese archivo está en el
 repositorio y cualquiera que vea el código las leería. Van en
 `includes/config.local.php`, que `.gitignore` excluye.
 
-Copie `includes/config.local.example.php` con el nombre `config.local.php` y
-escriba allí los datos de hPanel:
+La forma rápida es abrir `https://sudominio.com/instalar.php`: pide el nombre de
+la base, el usuario y la contraseña, prueba la conexión y, solo si funciona,
+escribe el archivo. El asistente se apaga solo en cuanto el archivo existe, y
+conviene borrarlo del servidor al terminar.
+
+A mano es igual de válido: copie `includes/config.local.example.php` con el
+nombre `config.local.php` y escriba allí los datos de hPanel:
 
 ```php
 return [
@@ -138,9 +143,13 @@ return [
 ];
 ```
 
-Si ese archivo no existe, el sitio usa los valores por defecto de `config.php`
-y no podrá conectarse: el síntoma es *"No pudimos conectar con la base de
-datos"*.
+Si ese archivo no existe, el sitio usa los valores por defecto de `config.php` y
+no puede conectarse. En ese caso muestra la pantalla que explica qué falta y
+enlaza al asistente, en vez de un error sin explicación.
+
+> **Al actualizar el sitio**, no sobrescriba `includes/config.local.php`: ahí
+> están sus credenciales. `config.php` sí se puede reemplazar sin problema,
+> porque ya no las contiene.
 
 **4. Subir los archivos**
 
