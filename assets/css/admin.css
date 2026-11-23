@@ -218,3 +218,26 @@ table.tabla td.num { text-align: right; font-variant-numeric: tabular-nums; }
   }
   .lateral[data-abierto="si"] { transform: none; box-shadow: var(--sombra-alta); }
 }
+
+/* --- Gestión de usuarios ------------------------------------------ */
+.rejilla-campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0 1.25rem;
+  align-items: start;
+}
+.rejilla-campos .campo { margin-bottom: 1.1rem; }
+
+/* Fila de acciones dentro de una celda de tabla. */
+.fila--menuda {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: .5rem .9rem;
+}
+.fila--menuda form { margin: 0; }
+.fila--menuda .enlace {
+  background: none; border: 0; padding: 0;
+  font: inherit; cursor: pointer;
+  color: var(--lila-hondo); text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.fila--menuda .enlace:hover { color: var(--tinta); }

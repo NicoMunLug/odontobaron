@@ -21,6 +21,12 @@ $secciones = [
     ['mensajes.php',     'Mensajes',  'M4 6h16v12H4zM4 7l8 6 8-6'],
     ['tratamientos.php', 'Tratamientos', 'M7 4h10l-1.2 8.5a4 4 0 0 1-7.6 0Z M12 16.5V20'],
 ];
+
+// La gestión de cuentas es solo para la administración del consultorio.
+if (rol() === 'admin') {
+    $secciones[] = ['usuarios.php', 'Usuarios',
+        'M9 11.5a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8ZM2.5 19.5c.8-3.3 3.4-5.1 6.5-5.1s5.7 1.8 6.5 5.1M17 8.5h4.5M19.25 6.25v4.5'];
+}
 $aqui = basename($_SERVER['SCRIPT_NAME']);
 ?><!DOCTYPE html>
 <html lang="es-CO">

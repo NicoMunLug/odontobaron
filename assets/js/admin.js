@@ -31,3 +31,24 @@
     });
   });
 })();
+
+/* Muestra u oculta un bloque del panel (por ejemplo el de crear usuario). */
+(function () {
+  document.querySelectorAll('[data-abre]').forEach(function (boton) {
+    var destino = document.getElementById(boton.getAttribute('data-abre'));
+    if (!destino) return;
+
+    boton.setAttribute('aria-expanded', destino.hidden ? 'false' : 'true');
+    boton.setAttribute('aria-controls', destino.id);
+
+    boton.addEventListener('click', function () {
+      destino.hidden = !destino.hidden;
+      boton.setAttribute('aria-expanded', destino.hidden ? 'false' : 'true');
+      if (!destino.hidden) {
+        destino.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        var primero = destino.querySelector('input, select, textarea');
+        if (primero) primero.focus({ preventScroll: true });
+      }
+    });
+  });
+})();
